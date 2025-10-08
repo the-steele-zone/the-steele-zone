@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Steele Zone - Road Trip Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)), url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 0h100v100H0z" fill="%23f0f0f0"/%3E%3C/svg%3E');
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #667eea;
+        }
+
+        .team {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .team-member {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .team-member h3 {
+            font-size: 1.8rem;
+            color: #764ba2;
+            margin-bottom: 0.5rem;
+        }
+
+        .mission {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 2;
+        }
+
+        .cities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .city-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .city-card:hover {
+            border-left-color: #764ba2;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .city-card h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .donation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .donation-box h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .donation-box p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .contact {
+            background: #2d3748;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .contact h2 {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #764ba2;
+        }
+
+        footer {
+            background: #1a202c;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .team {
+                gap: 2rem;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">The Steele Zone</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Join Sophie & Jax on an Epic Road Trip Adventure!</h1>
+            <p>We're hitting the road to build The Steele Zone brand across America. Help us bring our vision to life, one city at a time.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>Meet the Team</h2>
+            <div class="team">
+                <div class="team-member">
+                    <h3>Sophie</h3>
+                    <p>Creative visionary and brand strategist with a passion for connecting communities and building authentic relationships on the road.</p>
+                </div>
+                <div class="team-member">
+                    <h3>Jax</h3>
+                    <p>Marketing maven and adventure enthusiast ready to document every moment and share The Steele Zone story with the world.</p>
+                </div>
+            </div>
+            <div class="mission">
+                <p><strong>Our Mission:</strong> We're embarking on a cross-country journey to establish The Steele Zone presence in key cities, meet incredible people, create unforgettable content, and build a brand that resonates nationwide.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>Our Journey</h2>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                We're planning to visit key cities across America, connecting with communities, sharing stories, and establishing The Steele Zone brand presence in each location.
+            </p>
+            <div class="cities">
+                <div class="city-card">
+                    <h3>🌆 Major Cities</h3>
+                    <p>Building connections in urban hubs</p>
+                </div>
+                <div class="city-card">
+                    <h3>🎬 Content Creation</h3>
+                    <p>Documenting the journey</p>
+                </div>
+                <div class="city-card">
+                    <h3>🤝 Community Events</h3>
+                    <p>Meeting supporters face-to-face</p>
+                </div>
+                <div class="city-card">
+                    <h3>📱 Social Media</h3>
+                    <p>Sharing live updates daily</p>
+                </div>
+                <div class="city-card">
+                    <h3>🎤 Brand Activation</h3>
+                    <p>Pop-up events & collaborations</p>
+                </div>
+                <div class="city-card">
+                    <h3>🌟 Authentic Stories</h3>
+                    <p>Real connections, real impact</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>Support Our Journey</h2>
+            <div class="donation-box">
+                <h3>Help Us Get On The Road!</h3>
+                <p>Your support will help cover travel costs, accommodation, equipment, and content creation as we build The Steele Zone brand across the country.</p>
+                <p><strong>Every contribution brings us one mile closer to making this dream a reality!</strong></p>
+                <a href="#" class="cta-button" onclick="alert('Thank you for your interest! Please contact us directly to discuss donation options.'); return false;">Support The Journey</a>
+                <p style="margin-top: 2rem; font-size: 0.9rem;">All donations go directly to funding the road trip and brand-building activities.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">Want to connect, collaborate, or learn more about our journey?</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>Email</strong>
+                    <a href="mailto:hello@thesteelezone.com">hello@thesteelezone.com</a>
+                </div>
+                <div class="contact-item">
+                    <strong>Follow Our Journey</strong>
+                    <a href="https://github.com/the-steele-zone" target="_blank">GitHub: @the-steele-zone</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 The Steele Zone. All rights reserved. Built with passion for the journey ahead.</p>
+        </div>
+    </footer>
+</body>
+</html>
