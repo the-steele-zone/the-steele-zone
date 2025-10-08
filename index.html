@@ -34,187 +34,131 @@
             letter-spacing: 3px;
         }
         .hero {
-            background: linear-gradient(rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)), url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 0h100v100H0z" fill="%23f0f0f0"/%3E%3C/svg%3E');
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 5rem 0;
             text-align: center;
+            padding: 4rem 0;
         }
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            animation: fadeInUp 1s ease-out;
         }
         .hero p {
-            font-size: 1.3rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            animation: fadeInUp 1.2s ease-out;
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .section {
-            padding: 4rem 0;
-        }
-        .section:nth-child(even) {
-            background: #f8f9fa;
-        }
-        h2 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: #667eea;
-        }
-        .team {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-        .team-member {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            flex: 1;
-            min-width: 250px;
-            max-width: 350px;
-            transition: transform 0.3s ease;
-        }
-        .team-member:hover {
-            transform: translateY(-10px);
-        }
-        .team-member h3 {
-            font-size: 1.8rem;
-            color: #764ba2;
-            margin-bottom: 0.5rem;
-        }
-        .mission {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-            font-size: 1.2rem;
-            line-height: 2;
-        }
-        .cities {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .city-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-        .city-card:hover {
-            border-left-color: #764ba2;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        .city-card h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-        .donation-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 3rem;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto;
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        }
-        .donation-box h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        .donation-box p {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             margin-bottom: 2rem;
         }
         .cta-button {
             display: inline-block;
             background: white;
             color: #667eea;
-            padding: 1rem 3rem;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 1rem 2rem;
             text-decoration: none;
             border-radius: 50px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+            transition: transform 0.3s;
         }
         .cta-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
         }
-        .contact {
-            background: #2d3748;
-            color: white;
-            padding: 3rem 0;
+        .section {
+            padding: 4rem 0;
+        }
+        .section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #667eea;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .contact h2 {
-            color: white;
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+        .timeline-item {
             margin-bottom: 2rem;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -50px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+        .city-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .city-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .donation-box {
+            background: #f7fafc;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .donation-box h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .contact {
+            background: #f7fafc;
+            padding: 4rem 0;
         }
         .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
             margin-top: 2rem;
         }
         .contact-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
+            padding: 1rem;
         }
         .contact-item a {
             color: #667eea;
             text-decoration: none;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
+            font-weight: bold;
         }
         .contact-item a:hover {
-            color: #764ba2;
+            text-decoration: underline;
         }
         footer {
-            background: #1a202c;
+            background: #2d3748;
             color: white;
             text-align: center;
             padding: 2rem 0;
-        }
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            .hero p {
-                font-size: 1.1rem;
-            }
-            h2 {
-                font-size: 2rem;
-            }
-            .team {
-                gap: 2rem;
-            }
-            .logo {
-                font-size: 1.8rem;
-            }
         }
     </style>
 </head>
@@ -224,51 +168,114 @@
             <div class="logo">The Steele Zone</div>
         </div>
     </header>
+
     <section class="hero">
         <div class="container">
-            <h1>Join Sophie & Jax on an Epic Road Trip Adventure!</h1>
-            <p>We're hitting the road to build The Steele Zone brand across America. Help us bring our vision to life, one city at a time.</p>
+            <h1>Sophie & Jax Steele's Road Trip Adventure</h1>
+            <p>Following our journey across America as we build The Steele Zone brand</p>
+            <a href="#contact" class="cta-button">Connect With Us</a>
         </div>
     </section>
+
     <section class="section">
         <div class="container">
-            <h2>Meet the Team</h2>
-            <div class="team">
-                <div class="team-member">
-                    <h3>Sophie</h3>
-                    <p>Creative visionary and brand strategist with a passion for connecting communities and building authentic relationships on the road.</p>
-                </div>
-                <div class="team-member">
-                    <h3>Jax</h3>
-                    <p>Marketing maven and adventure enthusiast ready to document every moment and share The Steele Zone story with the world.</p>
-                </div>
-            </div>
-            <div class="mission">
-                <p><strong>Our Mission:</strong> We're embarking on a cross-country journey to establish The Steele Zone presence in key cities, meet incredible people, create unforgettable content, and build a brand that resonates nationwide.</p>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container">
-            <h2>Our Journey</h2>
-            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-                We're planning to visit key cities across America, connecting with communities, sharing stories, and establishing The Steele Zone brand presence in each location.
+            <h2>Our Mission</h2>
+            <p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto;">
+                We're Sophie and Jax Steele, a real couple on a mission to create authentic, consent-first content while traveling across the United States. Join us as we explore new cities, meet incredible people, and share our journey of building The Steele Zone brand from coast to coast.
             </p>
-            <div class="cities">
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>What We're Building</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>📍 Road Trip Series</h3>
+                    <p>Follow our travels through multiple U.S. cities, capturing behind-the-scenes moments and exclusive content along the way.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💼 Brand Development</h3>
+                    <p>Building The Steele Zone from the ground up - a platform for authentic couple content and genuine connections.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤝 Community Engagement</h3>
+                    <p>Meeting fans, collaborating with creators, and building real relationships across the country.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>Our Journey So Far</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Phase 1: Planning & Preparation</h3>
+                    <p>Building our online presence and planning our route across America</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Phase 2: First Cities</h3>
+                    <p>Launching content creation in major markets</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Phase 3: Nationwide Expansion</h3>
+                    <p>Expanding The Steele Zone brand coast to coast</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>Target Cities on Our Route</h2>
+            <div class="city-grid">
                 <div class="city-card">
-                    <h3>🌆 Major Cities</h3>
-                    <p>Building connections in urban hubs</p>
+                    <h3>🏙️ Las Vegas</h3>
+                    <p>Entertainment capital & content hub</p>
                 </div>
                 <div class="city-card">
-                    <h3>🎬 Content Creation</h3>
-                    <p>Documenting the journey</p>
+                    <h3>🌴 Los Angeles</h3>
+                    <p>Creator community & industry events</p>
                 </div>
                 <div class="city-card">
-                    <h3>🤝 Community Events</h3>
-                    <p>Meeting supporters face-to-face</p>
+                    <h3>🌉 San Francisco</h3>
+                    <p>Tech & innovation scene</p>
                 </div>
                 <div class="city-card">
-                    <h3>📱 Social Media</h3>
+                    <h3>🎸 Nashville</h3>
+                    <p>Music & creative energy</p>
+                </div>
+                <div class="city-card">
+                    <h3>🌆 New York</h3>
+                    <p>Brand partnerships & media</p>
+                </div>
+                <div class="city-card">
+                    <h3>🌴 Miami</h3>
+                    <p>Beach lifestyle & networking</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2>Why We're Doing This</h2>
+            <div class="features">
+                <div class="city-card">
+                    <h3>💑 Authentic Storytelling</h3>
+                    <p>Sharing our real relationship journey</p>
+                </div>
+                <div class="city-card">
+                    <h3>📱 Content Creation</h3>
+                    <p>Building professional couple content</p>
+                </div>
+                <div class="city-card">
+                    <h3>🌍 Meeting Our Community</h3>
+                    <p>Connecting with fans in person</p>
+                </div>
+                <div class="city-card">
+                    <h3>📹 Behind-the-Scenes</h3>
                     <p>Sharing live updates daily</p>
                 </div>
                 <div class="city-card">
@@ -282,6 +289,7 @@
             </div>
         </div>
     </section>
+
     <section class="section">
         <div class="container">
             <h2>Support Our Journey</h2>
@@ -294,34 +302,36 @@
             </div>
         </div>
     </section>
-    <section class="contact">
+
+    <section class="contact" id="contact">
         <div class="container">
             <h2>Get In Touch</h2>
             <p style="font-size: 1.2rem; margin-bottom: 1rem;">Want to connect, collaborate, or learn more about our journey?</p>
             <div class="contact-info">
                 <div class="contact-item">
-                    <strong>Email</strong>
+                    <strong>Email</strong><br>
                     <a href="mailto:hello@thesteelezone.com">hello@thesteelezone.com</a>
                 </div>
                 <div class="contact-item">
-                    <strong>Instagram</strong>
+                    <strong>Instagram</strong><br>
                     <a href="https://instagram.com/the_steele_zone" target="_blank">@the_steele_zone</a>
                 </div>
                 <div class="contact-item">
-                    <strong>TikTok</strong>
+                    <strong>TikTok</strong><br>
                     <a href="https://tiktok.com/@sophie__steele" target="_blank">@sophie__steele</a>
                 </div>
                 <div class="contact-item">
-                    <strong>All Links</strong>
-                    <a href="https://linktr.ee/Thesteelezone" target="_blank">linktr.ee/Thesteelezone</a>
+                    <strong>All Links</strong><br>
+                    <a href="https://linkfly.to/thesteelezone" target="_blank">linkfly.to/thesteelezone</a>
                 </div>
                 <div class="contact-item">
-                    <strong>GitHub</strong>
+                    <strong>GitHub</strong><br>
                     <a href="https://github.com/the-steele-zone" target="_blank">@the-steele-zone</a>
                 </div>
             </div>
         </div>
     </section>
+
     <footer>
         <div class="container">
             <p>© 2025 The Steele Zone - Sophie & Jax Steele. All rights reserved.</p>
