@@ -1,0 +1,18 @@
+# Python dependencies for TikTok/Instagram to Discord auto-posting
+# FastAPI backend for webhook handling
+fastapi
+uvicorn
+pydantic
+python-dotenv
+httpx
+
+# Discord integration
+discord.py==2.4.0
+
+# Scheduling and automation
+apscheduler
+
+# Solana blockchain integration
+base58
+pynacl
+solana
