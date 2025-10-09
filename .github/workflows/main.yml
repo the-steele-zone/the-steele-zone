@@ -42,12 +42,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
       
-      - name: Install dependencies
+      - name: Install Node.js dependencies
         run: |
           npm init -y
           npm install discord.js @discordjs/rest discord-api-types axios dotenv @solana/web3.js
@@ -237,6 +248,13 @@ jobs:
             });
           EOF
       
+      - name: Verify Python installation
+        run: |
+          echo "Python version:"
+          python --version
+          echo "\nInstalled Python packages:"
+          pip list
+      
       - name: Run Discord posting script
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
@@ -261,6 +279,15 @@ jobs:
       - name: Notify on failure
         if: failure()
         run: |
-          echo "Workflow failed. Check logs for details."
+          echo "❌ Workflow failed. Check logs for details."
           echo "Ensure all secrets are properly configured in GitHub repository settings."
+          echo "Required secrets: DISCORD_BOT_TOKEN, DISCORD_GUILD_ID, DISCORD_DROPS_CHANNEL_ID, DISCORD_LOG_CHANNEL_ID"
+          echo "Optional secrets: SOLANA_RPC, TREASURY_WALLET, NETWORK, MINT_PRICE_SOL, etc."
           exit 1
+      
+      - name: Workflow summary
+        if: success()
+        run: |
+          echo "✅ Social media auto-post workflow completed successfully!"
+          echo "Platform: ${{ github.event.inputs.platform || 'scheduled check' }}"
+          echo "Test mode: ${{ github.event.inputs.test_mode || 'false' }}"
