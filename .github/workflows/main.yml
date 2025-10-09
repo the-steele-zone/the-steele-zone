@@ -1,0 +1,266 @@
+name: Social Media to Discord Auto-Post
+
+on:
+  # Trigger on new TikTok/Instagram posts via webhook or schedule
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Social media platform'
+        required: true
+        default: 'tiktok'
+        type: choice
+        options:
+          - tiktok
+          - instagram
+      media_url:
+        description: 'Media URL'
+        required: true
+        type: string
+      post_text:
+        description: 'Post caption/text'
+        required: false
+        type: string
+      test_mode:
+        description: 'Run in test mode'
+        required: false
+        default: false
+        type: boolean
+  
+  # Schedule to check for new posts every 15 minutes
+  schedule:
+    - cron: '*/15 * * * *'
+  
+  # Allow manual testing
+  repository_dispatch:
+    types: [social_post]
+
+jobs:
+  autopost-to-discord:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install discord.js @discordjs/rest discord-api-types axios dotenv @solana/web3.js
+      
+      - name: Create Discord posting script
+        run: |
+          cat > post-to-discord.js << 'EOF'
+          const { Client, GatewayIntentBits, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+          const axios = require('axios');
+          const { Connection, PublicKey, LAMPORTS_PER_SOL } = require('@solana/web3.js');
+          
+          // Environment configuration
+          const config = {
+            discord: {
+              token: process.env.DISCORD_BOT_TOKEN,
+              guildId: process.env.DISCORD_GUILD_ID,
+              dropsChannelId: process.env.DISCORD_DROPS_CHANNEL_ID,
+              logChannelId: process.env.DISCORD_LOG_CHANNEL_ID
+            },
+            solana: {
+              rpc: process.env.SOLANA_RPC || 'https://api.mainnet-beta.solana.com',
+              treasuryWallet: process.env.TREASURY_WALLET,
+              network: process.env.NETWORK || 'mainnet',
+              mintPriceSol: parseFloat(process.env.MINT_PRICE_SOL || '1.0'),
+              minTreasuryBalance: parseFloat(process.env.MIN_TREASURY_BALANCE_SOL || '2.0')
+            },
+            pricing: {
+              maxDynamicPriceUp: parseFloat(process.env.MAX_DYNAMIC_PRICE_UP_PCT || '25'),
+              maxDynamicPriceDown: parseFloat(process.env.MAX_DYNAMIC_PRICE_DOWN_PCT || '25'),
+              dailySpendCap: parseFloat(process.env.DAILY_SPEND_SOL_CAP || '5.0'),
+              weeklySpendCap: parseFloat(process.env.WEEKLY_SPEND_SOL_CAP || '20.0')
+            },
+            post: {
+              platform: process.env.PLATFORM || 'tiktok',
+              mediaUrl: process.env.MEDIA_URL,
+              postText: process.env.POST_TEXT || '',
+              testMode: process.env.TEST_MODE === 'true'
+            }
+          };
+          
+          async function checkSolanaBalance() {
+            try {
+              const connection = new Connection(config.solana.rpc, 'confirmed');
+              const publicKey = new PublicKey(config.solana.treasuryWallet);
+              const balance = await connection.getBalance(publicKey);
+              const balanceSOL = balance / LAMPORTS_PER_SOL;
+              console.log(`Treasury balance: ${balanceSOL} SOL`);
+              return balanceSOL;
+            } catch (error) {
+              console.error('Error checking Solana balance:', error);
+              return null;
+            }
+          }
+          
+          async function downloadMedia(url) {
+            try {
+              const response = await axios.get(url, { responseType: 'arraybuffer' });
+              return Buffer.from(response.data);
+            } catch (error) {
+              console.error('Error downloading media:', error);
+              return null;
+            }
+          }
+          
+          async function postToDiscord() {
+            const client = new Client({
+              intents: [
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.GuildMessages,
+                GatewayIntentBits.MessageContent
+              ]
+            });
+          
+            return new Promise(async (resolve, reject) => {
+              client.once('ready', async () => {
+                console.log(`Logged in as ${client.user.tag}`);
+                
+                try {
+                  // Check Solana treasury balance
+                  const balance = await checkSolanaBalance();
+                  const balanceWarning = balance && balance < config.solana.minTreasuryBalance 
+                    ? `⚠️ Treasury balance low: ${balance.toFixed(2)} SOL` 
+                    : '';
+                  
+                  // Get the target channel
+                  const channel = await client.channels.fetch(config.discord.dropsChannelId);
+                  const logChannel = await client.channels.fetch(config.discord.logChannelId);
+                  
+                  // Create embed
+                  const embed = new EmbedBuilder()
+                    .setTitle(`🆕 New ${config.post.platform.toUpperCase()} Post!`)
+                    .setDescription(config.post.postText || 'Check out this new post!')
+                    .setColor(config.post.platform === 'tiktok' ? 0x000000 : 0xE1306C)
+                    .setTimestamp()
+                    .addFields(
+                      { name: 'Platform', value: config.post.platform.toUpperCase(), inline: true },
+                      { name: 'Mint Price', value: `${config.solana.mintPriceSol} SOL`, inline: true }
+                    );
+                  
+                  if (balanceWarning) {
+                    embed.addFields({ name: 'Treasury Status', value: balanceWarning, inline: false });
+                  }
+                  
+                  if (config.post.testMode) {
+                    embed.setFooter({ text: '🧪 TEST MODE - This is a test post' });
+                  }
+                  
+                  // Download and attach media if available
+                  let messageOptions = { embeds: [embed] };
+                  
+                  if (config.post.mediaUrl) {
+                    console.log('Downloading media...');
+                    const mediaBuffer = await downloadMedia(config.post.mediaUrl);
+                    
+                    if (mediaBuffer) {
+                      const fileExtension = config.post.mediaUrl.split('.').pop().split('?')[0] || 'mp4';
+                      const attachment = new AttachmentBuilder(mediaBuffer, { 
+                        name: `post.${fileExtension}` 
+                      });
+                      messageOptions.files = [attachment];
+                      embed.setImage(`attachment://post.${fileExtension}`);
+                    }
+                  }
+                  
+                  // Send message to drops channel
+                  const message = await channel.send(messageOptions);
+                  console.log(`Posted to Discord: ${message.id}`);
+                  
+                  // Add reactions for engagement
+                  await message.react('🔥');
+                  await message.react('💎');
+                  await message.react('🚀');
+                  
+                  // Log to log channel
+                  const logEmbed = new EmbedBuilder()
+                    .setTitle('✅ Auto-Post Successful')
+                    .setColor(0x00FF00)
+                    .addFields(
+                      { name: 'Platform', value: config.post.platform, inline: true },
+                      { name: 'Message ID', value: message.id, inline: true },
+                      { name: 'Timestamp', value: new Date().toISOString(), inline: false }
+                    )
+                    .setTimestamp();
+                  
+                  if (balance !== null) {
+                    logEmbed.addFields({ name: 'Treasury Balance', value: `${balance.toFixed(4)} SOL`, inline: true });
+                  }
+                  
+                  await logChannel.send({ embeds: [logEmbed] });
+                  
+                  await client.destroy();
+                  resolve({ success: true, messageId: message.id });
+                } catch (error) {
+                  console.error('Error posting to Discord:', error);
+                  
+                  // Try to log error
+                  try {
+                    const logChannel = await client.channels.fetch(config.discord.logChannelId);
+                    const errorEmbed = new EmbedBuilder()
+                      .setTitle('❌ Auto-Post Failed')
+                      .setColor(0xFF0000)
+                      .setDescription(`Error: ${error.message}`)
+                      .setTimestamp();
+                    await logChannel.send({ embeds: [errorEmbed] });
+                  } catch (logError) {
+                    console.error('Could not log error to Discord:', logError);
+                  }
+                  
+                  await client.destroy();
+                  reject(error);
+                }
+              });
+              
+              client.login(config.discord.token).catch(reject);
+            });
+          }
+          
+          // Execute
+          postToDiscord()
+            .then(result => {
+              console.log('Success:', result);
+              process.exit(0);
+            })
+            .catch(error => {
+              console.error('Failed:', error);
+              process.exit(1);
+            });
+          EOF
+      
+      - name: Run Discord posting script
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
+          DISCORD_DROPS_CHANNEL_ID: ${{ secrets.DISCORD_DROPS_CHANNEL_ID }}
+          DISCORD_LOG_CHANNEL_ID: ${{ secrets.DISCORD_LOG_CHANNEL_ID }}
+          SOLANA_RPC: ${{ secrets.SOLANA_RPC }}
+          TREASURY_WALLET: ${{ secrets.TREASURY_WALLET }}
+          NETWORK: ${{ secrets.NETWORK }}
+          MINT_PRICE_SOL: ${{ secrets.MINT_PRICE_SOL }}
+          MAX_DYNAMIC_PRICE_UP_PCT: ${{ secrets.MAX_DYNAMIC_PRICE_UP_PCT }}
+          MAX_DYNAMIC_PRICE_DOWN_PCT: ${{ secrets.MAX_DYNAMIC_PRICE_DOWN_PCT }}
+          DAILY_SPEND_SOL_CAP: ${{ secrets.DAILY_SPEND_SOL_CAP }}
+          WEEKLY_SPEND_SOL_CAP: ${{ secrets.WEEKLY_SPEND_SOL_CAP }}
+          MIN_TREASURY_BALANCE_SOL: ${{ secrets.MIN_TREASURY_BALANCE_SOL }}
+          PLATFORM: ${{ github.event.inputs.platform || 'tiktok' }}
+          MEDIA_URL: ${{ github.event.inputs.media_url || '' }}
+          POST_TEXT: ${{ github.event.inputs.post_text || '' }}
+          TEST_MODE: ${{ github.event.inputs.test_mode || 'false' }}
+        run: node post-to-discord.js
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Workflow failed. Check logs for details."
+          echo "Ensure all secrets are properly configured in GitHub repository settings."
+          exit 1
