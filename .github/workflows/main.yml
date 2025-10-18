@@ -1,5 +1,30 @@
-name: Social Media to Discord Auto-Post
+# ============================================================================
+# ESSENTIAL WORKFLOW FOR @thesteelezone AND @thediscobassnft PROJECTS
+# ============================================================================
+# This workflow automates social media posts (TikTok/Instagram) to Discord
+# 
+# IMPORTANT: This workflow is critical infrastructure for:
+#   - @thesteelezone: Social media automation and community engagement
+#   - @thediscobassnft: NFT drops, minting updates, and Discord notifications
+#
+# DO NOT DELETE OR MODIFY WITHOUT TESTING
+#
+# Purpose:
+#   - Automatically posts new TikTok/Instagram content to Discord
+#   - Integrates with Solana blockchain for NFT minting
+#   - Monitors treasury wallet balance
+#   - Provides real-time notifications to Discord community
+#
+# Usage:
+#   - Runs automatically every 15 minutes
+#   - Can be triggered manually via workflow_dispatch
+#   - Requires Discord bot token and channel IDs in secrets
+#   - Optional: Solana RPC and treasury wallet for NFT features
+#
+# Reference: See README.md for complete setup instructions
+# ============================================================================
 
+name: Social Media to Discord Auto-Post
 on:
   # Trigger on new TikTok/Instagram posts via webhook or schedule
   workflow_dispatch:
@@ -33,7 +58,6 @@ on:
   # Allow manual testing
   repository_dispatch:
     types: [social_post]
-
 jobs:
   autopost-to-discord:
     runs-on: ubuntu-latest
